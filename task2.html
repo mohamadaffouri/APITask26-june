@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pokeapi</title>
+    <style>
+    
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 300px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .card p {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="searchQuery" placeholder="Search for videos">
+    <input type="button" value="Search" onclick="getPokeapi()">
+    <div id="videoCards" class="mainDiv"></div>
+
+    <script>
+        async function getPokeapi() {
+            var search = document.getElementById("searchQuery").value;
+            const firstUrl=`https://pokeapi.co/api/v2/pokemon-form/${search}`;
+            
+            
+            try {
+                const response = await fetch(firstUrl);
+                const data = await response.json();
+                displayPokeapi(data);
+                
+
+
+
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+
+        function displayPokeapi(data) {
+            var videoCards = document.getElementById("videoCards");
+            videoCards.innerHTML = '';
+
+            
+                var img = data.sprites.back_default;
+               
+
+                var card = document.createElement('div');
+                card.className = 'card';
+
+                card.innerHTML = `
+                    <img src="${img}" alt="1">
+                   
+                `;
+
+                videoCards.appendChild(card);
+            
+        }
+    </script>
+</body>
+</html>

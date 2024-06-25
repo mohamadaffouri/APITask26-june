@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Search</title>
+    <style>
+        .mainDiv{
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 300px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .card p {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="searchQuery" placeholder="Search for videos">
+    <input type="button" value="Search" onclick="getVideos()">
+    <div id="videoCards" class="mainDiv"></div>
+
+    <script>
+        async function getVideos() {
+            var search = document.getElementById("searchQuery").value;
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${search}&key=AIzaSyC2rrW1JeMLwtcFMeyCxl0V1pQKYJtgaU8`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                displayVideos(data);
+
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+
+        function displayVideos(data) {
+            var videoCards = document.getElementById("videoCards");
+            videoCards.innerHTML = '';
+
+            data.items.forEach(item => {
+                var thumbnail = item.snippet.thumbnails.high.url;
+                var title = item.snippet.title;
+                var description = item.snippet.description;
+
+                var card = document.createElement('div');
+                card.className = 'card';
+
+                card.innerHTML = `
+                    <img src="${thumbnail}" alt="${title}">
+                    <h3>${title}</h3>
+                    <p>${description}</p>
+                `;
+
+                videoCards.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
